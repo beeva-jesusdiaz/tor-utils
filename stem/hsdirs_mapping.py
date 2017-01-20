@@ -8,33 +8,11 @@ import stem.process
 import stem
 from stem.control import Controller
 
-from geoip import geolite2
-
-def getNodesByCountry (list):
-  
-  exits = {}
-  rest = {}
-  for entry in list:
-
-    country = geolite2.lookup(entry.address)
-    if country is not None:
-      country_code = country.country
-    else:
-      country_code = "Unknown"
-  
-    # We only want exits
-    if u"Exit" in entry.flags:
-      if not country_code in exits:
-        exits[country_code] = []
-      exits[country_code].append(entry)
-    else:
-      if not country_code in rest:
-        rest[country_code] = []
-      rest[country_code].append(entry)        
-                
-  return [exits, rest]
-
 if __name__ == '__main__':
+
+  if len(sys.argv) != 2 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
+	print ("Usage: %s <target>" % sys.argv[0])
+	sys.exit(0)
 
   # Create the controller
   try:
@@ -65,9 +43,17 @@ if __name__ == '__main__':
   except stem.ControllerError as exc:
     print("Unable to retrieve network statuses: %s" % exc)
 
-  for node in list:
+  sorted_list = sorted (list, key=lambda node:node.digest)
+
+  target = sys.argv[1]
+  found = 0
+  print ("Looking for the HSDirs serving %s" % target)
+  
+  for node in sorted_list:
     if u"HSDir" in node.flags:
-      print (node)
+	if node.digest >= target and found < 3:
+		print ("HSDIR: %s\nFlags: %s" % (node.digest, node.flags))
+		found += 1
 
   # Exit
           
