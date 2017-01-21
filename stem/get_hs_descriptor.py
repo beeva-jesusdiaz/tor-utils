@@ -3,6 +3,8 @@
 import sys
 import stem
 import getpass
+import base64
+import binascii
 
 from stem.control import Controller
 
@@ -36,4 +38,8 @@ if __name__ == '__main__':
     sys.exit()
 
   # descriptor of duck-duck-go's hidden service (http://3g2upl4pq6kufc4m.onion)
-  print(controller.get_hidden_service_descriptor(sys.argv[1]))
+  desc = controller.get_hidden_service_descriptor(sys.argv[1])
+  desc_fp = desc.descriptor_id 
+  print ("Descriptor FP: %s" % binascii.b2a_hex(base64.b64decode(desc.descriptor_id)).upper())
+
+ 
