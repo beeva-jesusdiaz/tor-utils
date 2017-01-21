@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 import os
+import stem
+import sys
+import getpass
 
 from stem.control import Controller
 from flask import Flask
