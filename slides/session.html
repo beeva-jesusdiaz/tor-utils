@@ -1,0 +1,1405 @@
+<!--<!doctype html>-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>BEEVA - Anonymous Browsing</title>
+
+    <link rel="stylesheet" href="revealjs/css/reveal.css">
+    <link rel="stylesheet" href="revealjs/css/theme/white.css">
+    
+    <link rel="stylesheet" href="mycss/main.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="revealjs/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>-->
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'reveal.js/css/print/pdf.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+<!--    <div id="hidden" style="display:none;">
+      <div id="header">
+        <div id="header-left"><image class="logo" src="figures/header-beeva.png"></div>
+      </div>
+    </div>-->
+
+    <div class="reveal">
+      <div class="slides">
+
+	<section data-background-image="figures/beeva-front.png" data-background-size="70%">
+	  <h2 style="color:white">Anonymous browsing and Deep Web</h2>
+	</section>
+
+	<section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	  <h2>Contents</h2>
+	  <ol>
+	    <li><a data-toggle="collapse" href="#contents-1"><strong>Introduction</strong></a></li>
+	    <div id="contents-1" class="panel-collapse collapse"><p>Motivation and overview</p></div>
+	    <li><a data-toggle="collapse" href="#contents-2"><strong>Internet, WWW, Deep Web, Dark Web</strong></a></li>
+	    <div id="contents-2" class="panel-collapse collapse"><p>Definitions and comparison</p></div>
+	    <li><a data-toggle="collapse" href="#contents-3"><strong>Cryptography 101</strong></a></li>
+	    <div id="contents-3" class="panel-collapse collapse">
+	      <p>Hashes</p>
+	      <p>Symmetric and asymmetric cryptography</p>
+	      <p>Other cryptographic mechanisms</p>
+	    </div>
+	    <li><a data-toggle="collapse" href="#contents-4"><strong>Communication protocols 101</strong></a></li>
+	    <div id="contents-4" class="panel-collapse collapse">
+	      <p>TCP/IP Packets</p>
+	      <p>Data encapsulation</p>
+	    </div>
+	    <li><a data-toggle="collapse" href="#contents-5"><strong>Tor in detail</strong></a></li>
+	    <div id="contents-5" class="panel-collapse collapse">
+	      <p>Origins and properties</p>
+	      <p>Circuit creation</p>
+	      <p>Hidden services</p>
+	      <p>Advanced concepts</p>
+	      <p>Toolset</p>
+	    </div>
+	    <li><a data-toggle="collapse" href="#contents-6"><strong>Other systems, uses and applications</strong></a></li>
+	    <div id="contents-6" class="panel-collapse collapse">
+	      <p>I2P, Freenet, anonymizing proxies, etc.</p>
+	      <p>Illegal markets, anti-censorship</p>
+	      <p>Relation with cryptocurrencies</p>
+	    </div>
+	    <li><a data-toggle="collapse" href="#contents-7"><strong>Analysis</strong></a></li>
+	    <div id="contents-7" class="panel-collapse collapse">
+	      <p>De-anonymizing attacks</p>
+	    </div>
+	    <li><a data-toggle="collapse" href="#contents-8"><strong>Hands on</strong></a></li>
+	    <div id="contents-8" class="panel-collapse collapse">
+	      <p>Stem intro</p>
+	      <p>Circuit picking</p>
+	      <p>Tor network mapping</p>
+	      <p>HSDirs mapping</p>
+	      <p>OR in the middle</p>
+	      <p>Torification</p>
+	    </div>
+	  </ol>
+	  
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Introduction</h2>
+	    <p>Motivation</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/deepwww.jpeg" width="80%"/></p>
+	    <p style="font-size:30px">Image source: <a href="http://www.deepwebtech.com/" target="_blank"><i>Deep Web Technologies</i></a></p>
+	  </section>
+	  
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/wikileaks-tor.png" width="100%"/></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p><img src="figures/snowden-tor.png" width="80%"/></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/anonymous.jpg" width="80%"/></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <p><img src="figures/silkroad-tor.jpg" width="80%"/></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <p><img src="figures/xnet-bcn.png" width="80%"/></p>
+	    <p><a href="https://xnet-x.net/en/whistleblowing-platform-barcelona-city-council/" target="_blank">xnet-x.net</a></p>
+	  </section>  	  
+
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Internet, WWW, Deep Web, Dark Web</h2>
+	    <p>Definitions and comparison</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Internet</h3>
+	    <p>Global system of interconnected computer networks using the
+	      Internet protocol suite (TCP/IP).</p>
+	    <p style="font-size:30px">Source: <a href="https://en.wikipedia.org/wiki/Internet" target="_blank">Wikipedia</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>WWW</h3>
+	    <p>Set of resources with unique identifiers in the Internet.</p>
+	    <p>Using HTML and related technologies.</p>
+	    <p>Accessible through web browsers.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Deep Web</h3>
+	    <p>Parts of the Web not indexed by search engines.</p>
+	    <p><strong>Surface Web</strong>: indexed by search engines.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Dark Web</h3>
+	    <p>Uses the Internet...</p>
+	    <p class="fragment fade-in">... to build an overlay (web) network ...</p>
+	    <p class="fragment fade-in">... that requires special software to be accessed.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Relationships</h3>
+	    <div class="left" style="float:left;width:{{left.width}}">
+	      <p>Internet $\supset$ WWW</p>
+	      <p>Internet $\supset$ Deep Web</p>
+	      <p>Internet $\supset$ Dark Web</p>
+	    </div>
+	    <div class="right fragment fade-in" style="float:right;width:{{right.width}}">
+	      <p>WWW $=$ Deep Web $\cup$ Surface Web</p>
+	      <p>WWW $\supset$ Deep Web</p>
+	      <p>Deep Web $\supset$ Dark Web</p>
+	    </div>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/deepwww.jpeg" width="80%"/></p>
+	    <p style="font-size:30px">Image source: <a href="http://www.deepwebtech.com/" target="_blank"><i>Deep Web Technologies</i></a></p>
+	  </section>
+
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Cryptography 101</h2>
+	    <p>Cryptographic hashes</p>
+	    <p>Symmetric and asymmetric cryptography</p>
+	    <p>Other cryptographic mechanisms</p>
+	  </section>
+
+ 	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Cryptographic hashes</h3>
+	  </section>
+	  
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Functions that:</p>
+	    <ul>
+	      <li>Are easy to calculate.</li>
+	      <li>Are (very) <strong>hard to invert</strong>.</li>
+	      <li>If even just one bit of the input changes, roughly 50% of the bits of the output change too.</li>
+	      <li>It is hard to find two inputs with the same output.</li>
+	      <li class="fragment fade-in">Provide <strong>integrity</strong>.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <img src="figures/hashes.png" width="70%" />
+	    <p style="font-size:30px">Source: <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Cryptographic_Hash_Function.svg/375px-Cryptographic_Hash_Function.svg.png">
+		Wikimedia</a>.
+	    </p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <pre>
+	      <code data-trim>
+$ echo "Hello, World!" | openssl dgst -sha256 -hex
+(stdin)= c98c24b677eff44860afea6f493bbaec5bb1c4cbb209c6fc2bbb47f66ff2ad31
+	      </code>
+	    </pre>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Hashes for evidence gathering and chain of custody.</p>
+	    <pre>
+	      <code data-trim>
+$ dd if=/dev/sda1 of=sda1_dump bs=64K conv=noerror,sync
+$ sha256sum sda1_dump > sda1_dump.sha256
+	      </code>
+	    </pre>
+	  </section>
+
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Symmetric and asymmetric cryptography</h3>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Symmetric cryptography</h4>
+	    <ul>
+	      <li>Same key for encryption and decryption.</li>
+	      <li class="fragment fade-in">Provide <strong>confidentiality</strong>.</li>
+	      <li class="fragment fade-in">Problem: <strong>key distribution</strong>.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/symenc.gif" width="90%" />
+	    <p style="font-size:30px">Source: <a href="http://etutorials.org/Networking/Wireless+lan+security/Chapter+2.+Basic+Security+Mechanics+and+Mechanisms/Security+Mechanics/">etutorials</a>.</p>
+	  </section>
+
+	  <section>
+	    <pre>
+	      <code data-trim>
+$ echo "Hello, World!" | openssl enc -e -aes-256-cbc > data.enc
+enter aes-256-cbc encryption password:
+Verifying - enter aes-256-cbc encryption password:
+$ openssl enc -d -aes-256-cbc -in data.enc
+enter aes-256-cbc decryption password:
+Hello, World!
+	      </code>
+	    </pre>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Asymmetric cryptography</h4>
+	    <ul>
+	      <li>Different keys for "encryption" and "decryption".</li>
+	      <li>Can be used to provide:</li>
+	      <ul>
+		<li class="fragment fade-in"><strong>Confidentiality</strong> (public-key encryption).</li>
+		<li class="fragment fade-in"><strong>Authenticity</strong> (digital signatures).</li>
+		<li class="fragment fade-in"><strong>Key-exchange</strong> mechanisms.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/asymenc.gif" width="90%" />
+	    <p style="font-size:30px">Source: <a href="https://www.ibm.com/support/knowledgecenter/SSFKSJ_8.0.0/com.ibm.mq.sec.doc/q009800_.htm" target="_blank">ibm.com</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/signature.png" width="70%" />
+	    <p style="font-size:30px">Source: <a href="https://www.bestvpn.com/blog/15028/digital-signatures-why-and-how-you-should-use-them/" target="_blank">bestvpn.com</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <br/>
+	    <pre>
+	      <code data-trim>
+$ openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+$ openssl rsa -pubout -in private_key.pem -out public_key.pem
+	      </code>
+	    </pre>
+
+	    <!--<p>Option 1</p>-->
+	    <pre>
+	      <code data-trim>
+$ echo "Hello, World!" > msg
+$ openssl rsautl -sign -inkey private_key.pem -keyform PEM -in msg > msg.sig
+$ openssl rsautl -verify -inkey public_key.pem -pubin -keyform PEM -in msg.sig
+Hello, World!
+	      </code>
+	    </pre>
+
+	    <!--<p>Option 2</p>-->
+	    <pre>
+	      <code data-trim>
+$ echo "Hello, World!" > msg
+$ openssl dgst -sha256 -sign private_key.pem -out msg.sig msg
+$ openssl dgst -sha256  -verify  public_key.pem -signature msg.sig msg
+Verified OK 
+	      </code>
+	    </pre>
+	  </section>
+	  
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Other cryptographic mechanisms</h3>
+	    <!-- Key exchange, MACs...
+		<p>Explain DH exchange (useful for Tor handshake</p>
+		<p>Explain digital envelopes (useful for I2P)</p>-->
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <h4>Diffie-Hellman Key Exchange</h4>
+	    <img src="figures/dh-exchange.png" width="70%" />
+	    <p style="font-size:30px">Source: <a href="https://upload.wikimedia.org/wikipedia/commons/a/a3/Diffie-Hellman-Schl%C3%BCsselaustausch.png?uselang=es" target="_blank">Wikimedia</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <h4>Digital Envelopes (send)</h4>
+	    <img src="figures/DE-enc.png" width="70%" />
+	    <p style="font-size:30px">Source: <a href="http://sixscape.com/technology/digital-envelopes/" target="_blank">Sixscape</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <h4>Digital Envelopes (receive)</h4>
+	    <img src="figures/DE-dec.png" width="70%" />
+	    <p style="font-size:30px">Source: <a href="http://sixscape.com/technology/digital-envelopes/" target="_blank">Sixscape</a>.</p>
+	  </section>
+
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Communcation protocols 101</h2>
+	    <p>TCP/IP Packets</p>
+	    <p>Data encapsulation</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p>The header of an IP packet contains the IP address of both source and destination.</p>
+	    <img src="figures/ipheader.jpg" width="70%" />
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <pre style="width: 120%"><code data-trim>
+$ sudo tcpdump -i any dst port 443 -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 65535 bytes
+22:53:03.650759 IP 192.168.1.106.52563 > 151.101.12.201.443: Flags [.], ack 3624565601, win 2312, options [nop,nop,TS val 1579448 ecr 1205386751], length 0
+22:53:06.650698 IP 192.168.1.106.37807 > 68.232.35.121.443: Flags [.], ack 1896903471, win 435, options [nop,nop,TS val 1580198 ecr 409092328], length 0
+22:53:06.650750 IP 192.168.1.106.58231 > 23.215.21.87.443: Flags [.], ack 2827807890, win 367, options [nop,nop,TS val 1580198 ecr 717034815], length 0
+22:53:06.698735 IP 192.168.1.106.37809 > 68.232.35.121.443: Flags [.], ack 4009380063, win 480, options [nop,nop,TS val 1580210 ecr 406386672], length 0
+22:53:06.702362 IP 192.168.1.106.49251 > 216.58.194.163.443: Flags [S], seq 2245240006, win 29200, options [mss 1460,sackOK,TS val 1580210 ecr 0,nop,wscale 7], length 0
+	    </code></pre>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <pre style="width: 120%"><code data-trim>
+$ traceroute www.google.com
+traceroute to www.google.com (172.217.21.4), 30 hops max, 60 byte packets
+ 1  Livebox (192.168.1.1)  2.423 ms  4.846 ms  4.813 ms
+ 2  89.131.6.62 (89.131.6.62)  26.203 ms  27.657 ms  29.360 ms
+ 3  10.255.229.113 (10.255.229.113)  28.125 ms  28.757 ms  29.829 ms
+ 4  10.255.140.229 (10.255.140.229)  30.936 ms  34.057 ms  34.530 ms
+ 5  10.34.194.17 (10.34.194.17)  33.602 ms  34.250 ms  35.190 ms
+ 6  10.34.194.5 (10.34.194.5)  37.569 ms  25.481 ms  25.917 ms
+ 7  bundle-ether4.madtr2.madrid.opentransit.net (193.251.247.13)  31.764 ms  29.949 ms  24.258 ms
+ 8  72.14.209.130 (72.14.209.130)  24.809 ms  25.336 ms  26.332 ms
+ 9  209.85.252.150 (209.85.252.150)  26.880 ms  27.560 ms 216.239.50.28 (216.239.50.28)  29.353 ms
+10  209.85.245.237 (209.85.245.237)  52.276 ms  46.636 ms  52.910 ms
+11  209.85.255.253 (209.85.255.253)  57.457 ms  60.200 ms 72.14.232.30 (72.14.232.30)  60.861 ms
+12  216.239.57.195 (216.239.57.195)  60.848 ms 216.239.57.134 (216.239.57.134)  60.801 ms 216.239.57.195 (216.239.57.195)  61.254 ms
+13  72.14.236.53 (72.14.236.53)  47.795 ms  48.822 ms  48.487 ms
+14  www.google.com (172.217.21.4)  49.037 ms  50.416 ms  51.194 ms
+	    </code></pre>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <img src="figures/tcp_ip_encapsulation.png" width="70%" />
+	    <p style="font-size:30px">Image source: <a href="https://www.technologyuk.net/internet/internet-technology/tcp-ip-stack.shtml" target="_blank"><i>Technology UK</i></a></p>
+	  </section>
+
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Tor in detail</h2>
+	    <p>Origins and properties</p>
+	    <p>Circuit creation</p>
+	    <p>Hidden services</p>
+	    <p>Directory</p>
+	    <p>Bridges</p>
+	    <p>Toolset</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Origins and properties</h4>
+	  </section>
+
+	  <section>
+
+	    <p>
+	      From <a href="https://www.torproject.org/about/overview.html.en" target="_blank">Tor Project's overview</a>:
+	    </p>
+	    
+	    <p align="center">
+	      <i>The Tor network is a group of volunteer-operated servers that allows people to improve 
+		their privacy and security on the Internet.</i>
+	    </p>
+	    
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <p><strong>Good uses</strong></p>
+	    <ul>
+	      <li>Journalists: communication with whistleblowers and dissidents.</li>
+	      <li>Corporations: protect sensitive business "side" information from communication analysis.</li>
+	      <li>U.S. Navy: Open source intelligence gathering.</li>
+	      <li>Censorship circumvention.</li>
+	    </ul>
+	    
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <p><strong>Bad uses</strong></p>
+	    <ul>
+	      <li>Purchase illegitimate goods.</li>
+	      <li>Extortion, blackmailing. </li>
+	      <li>Download of copyright protected data.</li>
+	      <li>Cyberattacks and malware.</li>
+	    </ul>
+	    
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/Geographies_of_Tor.png" width="90%" />
+	    <p style="font-size:30px">Source: <a href="https://upload.wikimedia.org/wikipedia/commons/4/41/Geographies_of_Tor.png">Wikipedia</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <br/>
+	    <div id="tor-https-preload">
+	      <img src="https://www.eff.org/files/tor-https-0.png" width="70%" />
+	    </div>
+
+	    <a href="https://www.eff.org/es/pages/tor-and-https" target="_blank">Tor infographic</a> (Source: <i>EFF</i>).
+
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Easy to use <a href="https://www.torproject.org/projects/torbrowser.html.en" target="_blank">Tor browser bundle</a>.</p>
+	    <p>Easy to install <a href="https://www.torproject.org/docs/debian.html.en#ubuntu" target="_blank">Tor relay</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>Proposed by <a href="https://svn.torproject.org/svn/projects/design-paper/tor-design.pdf" target="_blank">Dingledine et al.</a> in 2004.</li>
+	      <li>Based on onion routing.</li>
+	      <ul>
+		<li>Each message is routed through several proxies, each
+		  adding an encryption layer.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/onion_diagram.png" width="90%" />
+	    <!--<p style="font-size:30px">Source: <a href="XXX">XXX</a>.</p>-->
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Circuit creation</h4>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <img src="figures/torhandshake1.png" width="80%" />
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/torhandshaken.png" width="80%" />
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/torcells.png" width="90%" />
+	    <p style="font-size:30px">Source: <a href="https://svn.torproject.org/svn/projects/design-paper/tor-design.pdf" target="_blank"><i>"Tor: The Second-Generation Onion Router"</i></a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Employed cryptographic primitives:</p>
+	    <ul>
+	      <li>Public key encryption.</li>
+	      <li>DH key negotiation.</li>
+	      <li>Hashes.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Properties ensured during and through handsake:</p>
+	    <ul>
+	      <li>Forward secrecy.</li>
+	      <li>Key freshness.</li>
+	      <li>OR authenticity.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>A good resource to get information about the Tor network:</p>
+	    <p>Blutmagie's <a href="https://torstatus.blutmagie.de/" target="_blank">torstatus</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Hidden services</h4>
+	    <p>Used to provide responder anonymity.</p>
+	    <ul>
+	      <li>Only accessible through Tor.</li>
+	      <li>Client never learns where is the HS located.</li>
+	    </ul>
+	    <p><u>Hidden services</u> are a major component of the Dark Web.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-1.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-2.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-3.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-4.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-5.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <img src="figures/THS-6.png" width="80%" />
+	    <br />
+	    <p style="font-size:30px">Source: <a href="https://www.torproject.org/docs/hidden-services.html.en" target="_blank">Tor Project</a>.</p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h5>How to browse/find .onion hidden services</h5>
+
+	    <p><a href="http://thehiddenwiki.org/" target="_blank">The Hidden Wiki</a>'s hidden service was 
+	      <a href="https://www.deepdotweb.com/2014/11/15/the-hidden-wiki-seized/" target="_blank">seized</a> 
+	      during <a href="https://en.wikipedia.org/wiki/Operation_Onymous" target="_blank">operation Onymous</a>.</p>
+	    <p>But it seems that it is back online.</p>
+	  </section>
+	  
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p><img src="figures/hiddenwiki.png" width="90%"/></p>
+	    <p style="font-size:30px"><a href="http://zqktlwi4fecvo6ri.onion/" target="_blank">The Hidden Wiki</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p><img src="figures/hdwiki.png" width="90%"/></p>
+	    <p style="font-size:30px"><a href="http://hdwikicorldcisiy.onion/" target="_blank">HD Wiki</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/allyouarewiki.png" width="80%"/></p>
+	    <p style="font-size:30px"><a href="http://allyour4nert7pkh.onion/wiki/index.php?title=Main_Page" target="_blank">All You Are Wiki</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/torsearch.png" width="80%"/></p>
+	    <p style="font-size:30px"><a href="http://hss3uro2hsxfogfq.onion/" target="_blank"><i>not Evil</i> browser</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/torch.png" width="80%"/></p>
+	    <p style="font-size:30px"><a href="http://xmh57jrzrnw6insl.onion/" target="_blank">Torch browser</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Entry Guards</h4>
+	    <ul>
+	      <li>Using a new entry node per circuit increases probability of attack.</li>
+	      <li>Entry guards: few preselected random nodes, always used as entry.</li>
+	      <ul>
+		<li>Attacker have less overall probability of success.</li>
+	      </ul>
+	    </ul>
+	    <p style="font-size:30px">More info: <a href="https://www.torproject.org/docs/faq.html.en#EntryGuards" target="_blank">Tor Project FAQ</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Bridges</h4>
+	    <ul>
+	      <li>Anticensorship tool.</li>
+	      <li>No complete list of Tor bridges is publicly availble.</li>
+	      <li>Thus, ISPs can't <i>directly</i> block them.</li>
+	      <li>Related: DPI and Tor's <a href="https://www.torproject.org/docs/pluggable-transports.html.en" target="_blank">pluggable transports</a>.</li>
+	    </ul>
+	    <p style="font-size:30px">
+	      More info: <a href="https://www.torproject.org/docs/bridges.html.en" target="_blank">Tor Project Bridges</a> and 
+	      <a href="https://bridges.torproject.org/" target="_blank">BridgeDB</a>.
+	    </p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <h4>Directory and consensus</h4>
+	    <ul>
+	      <li>Earliest version: list of servers included in software distribution.</li>
+	      <li>Version 1: authorities sent signed directory docs with servers info.</li>
+	      <li>Version 2: authorities sent signed network status; clients believe statements with more than 50% endorsing authorities.</li>
+	      <li>Version 3: authorities vote on common consensus; also optimization and security improvements.</li>
+	    </ul>
+	    <p style="font-size:30px">More info: <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">Dir specs</a>; Tool: <a href="https://collector.torproject.org/" target="_blank">CollecTor</a>.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>Data of 10 authorities is included in software distribution.</li>
+	      <li>Authorities vote on the network status document.</li>
+	      <li>When they reach consensus, the status info is updated.</li>
+	      <li>Updates occur periodically, in predefined intervals.</li>
+	    </ul>
+	    <p style="font-size:30px">More info: 
+	      <a href="http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/" target="_blank">
+		How Tor Works Part Three - The Consensus
+	      </a>
+	    </p>
+	    <p style="font-size:30px">
+	      <a href="http://jordan-wright.com/images/blog/how_tor_works/consensus.png" target="_blank">Consensus infographic</a>.
+	    </p>
+	    <p><a href="https://consensus-health.torproject.org/" target="_blank">Consensus health</a>.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><strong>Hidden Service directories</strong></p>
+	    <p><i>A router is a v2 hidden service directory if it stores and
+	      serves v2 hidden service descriptors, has the Stable and Fast flag, and the
+	      authority believes that it's been up for at least 96 hours</i>.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <p><strong>Hidden Service directories</strong></p>
+	    <p style="font-size:30px">Descriptor = H(pub. key id || H(desc-cookie* || time-period || replica index))</p>
+	    <img src="figures/hs_circular_list.png" width="40%" />
+	    <p style="font-size:30px">Source: <i><a href="http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf" target="_blank">"Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization"</a></i></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <p><strong>Metrics</strong></p>
+	    <p style="font-size:30px"><a href="https://metrics.torproject.org/" target="_blank">metrics.torproject.org</a></p>
+	  </section>
+	  
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Toolset</h4>
+	    <p>Main resource: <a href="https://stem.torproject.org/" target="_blank">Stem</a>.</p>
+	    <ul>
+	      <li>Tor Project's Python library for Tor.</li>
+	      <li>Used to build <a href="https://www.atagar.com/arm/" target="_bank">arm</a>, <a href="https://gitweb.torproject.org/doctor.git/tree" target="_blank" >DocTor</a> and many more.</li>
+	    </ul>
+	    <p>Interesting third party resources:</p>
+	    <ul>
+	      <li><a href="https://blog.jessfraz.com/post/routing-traffic-through-tor-docker-container/" target="_blank">Routing traffic through a Tor Docker container</a>.</li>
+	      <li><a href="https://blog.jessfraz.com/post/running-a-tor-relay-with-docker/" target="_blank">Running a Tor relay with Docker</a>.</li>
+	    </ul>
+	  </section>
+
+	</section>
+	
+	<section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Other systems, uses and applications</h2>
+	    <p>I2P, Freenet, anonymizing proxies, etc</p>
+	    <p>Illegal markets, anticenshorship</p>
+	    <p>Relation with cryptocurrencies</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>I2P</h3>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>The Invisible Internet Project</h4>
+	    <ul>
+	      <li class="fragment fade-in">Similar to Tor:</li>
+	      <ul>
+		<li class="fragment fade-in">Aimed at anonymization.</li>
+		<li class="fragment fade-in">Based in onion routing.</li>
+	      </ul>
+	      <li class="fragment fade-in">But different:</li>
+	      <ul>
+		<li class="fragment fade-in">Focuses on hidden services.</li>
+		<li class="fragment fade-in">Evolves onion routing into <i>garlic routing</i>.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/i2p.png" width="80%"/></p>
+	    <p style="font-size:30px">Image source: <a href="https://geti2p.net/tr/docs/how/intro" target="_blank"><i>I2P website</i></a></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <ul>
+	      <li>Each node creates two inbound tunnels (circuits) and two outbound tunnels.</li>
+	      <li>For A to communicate with B:</li>
+	      <ul>
+		<li>A sends data through one of her outbound tunnels.</li>
+		<li>A instructs the tunnel endpoint to forward the data to B's inbound tunnel.</li>
+	      </ul>
+	      <li>Each tunnel may be composed of up to 7 nodes.</li>
+	      <li>Between tunnels, up to 2 hops are possible.</li>
+	      <li>Tunnels are unidirectional.</li>
+	    </ul>
+	      
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <ul>
+	      <li>It is possible to bundle multiple messages under the same public key.</li>
+	      <ul>
+		<li class="fragment fade-in">This creates the <i>garlic's cloves</i>.</li>
+	      </ul>
+	      <li class="fragment fade-in">These bundles are also "onion-encrypted" and go through several routers.</li>
+	    </ul>
+	      
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>I2P supports exit nodes to route to the "external Internet".</li>
+	      <li>But it is focused to <i>.eep sites</i> $\approx$ Tor's hidden services.</li>
+	      <li>Thus, it mostly provides end-to-end encryption.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>A key component is its <i>netDB</i> (a DHT $\approx$ Tor's directory).</li>
+	      <li>It cointains information about I2P routers and .eep sites.</li>
+	      <li>It contains two types of metadata: <i>leaseSet</i> and <i>routerInfo</i>.</li>
+	    </ul>
+	  </section>
+	  
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>The <i>leaseSet</i> has information about endpoints:</li>
+	      <ul>
+		<li>Inbound gateway information.</li>
+		<li>Inbound tunnel lifetime.</li>
+		<li>Public keys.</li>
+	      </ul>
+	      <li>The <i>routerInfo</i> provides information about routers:</li>
+	      <ul>
+		<li>Public keys.</li>
+		<li>IP addresses.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Concerning cryptography, I2P uses:</p>
+	    <ul>
+	      <li>Digital envelopes (ElGamal+AES).</li>
+	      <ul>
+		<li>For garlic messages.</li>
+		<li>Several keys are exchanged between endpoints, identified with <i>SessionTags</i>.</li>
+	      </ul>
+	      <li>Diffie-Hellman exchange for router to router connections.</li>
+	      <li>SHA256 and HMACs for additional integrity and authentication guarantees.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Freenet</h3>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>An anonymous peer-to-peer network for publication, replication 
+	      and retrieval of data.</p>
+
+	    <p>Reference work: <i><a href="http://freehaven.net/anonbib/cache/freenet.pdf" target="_blank">
+		  Freenet: A Distributed Anonymous Information Storage and Retrieval System</i></a></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>Each file is identified with a unique <i>file key[word]</i>.</li>
+	      <ul>
+		<li>Not a cryptographic key, a unique name or label for referencing.</li>
+	      </ul>
+	      <li>Each node is also identified with a unique random bitstring.</li>
+	      <li>Nodes tend to store files with keyword similar to their identities.</li>
+	      <li>Files are encrypted to protect nodes.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Searching and storing files</h4>
+	    <p><img src="figures/freenet.png" width="80%"/></p>
+	    <p style="font-size:30px">Image source: <a href="http://www.deepwebtech.com/" target="_blank"><i>Freenet's paper</i></a></p>	    
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Three main ways of storing files:</p>
+	    <ul>
+	      <li>Based on Keyword Signed Keys (KSKs).</li>
+	      <li>Based on Subspace Signed Keys (SSKs).</li>
+	      <li>Based on Content Hash Keys (CHKs).</li> 
+	    </ul>
+	    <p>The most powerful is a combination of SSKs and CHKs.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Subspace Signed Keys (SSKs)</h4>
+	    <ul>
+	      <li>$(pk_{SSK},sk_{SSK}) \leftarrow Random$</li>
+	      <li>$k_{SSK} \leftarrow f(string)$
+	      <ul>
+		<li>$string$ is a descriptive string given to (humanly) identify the file.</li>
+	      </ul>
+	      <li style="font-size:35px">$keyword_{SSK} \leftarrow SHA1(SHA1(pk_{SSK}) \oplus SHA1(string))$</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Subspace Signed Keys (SSKs)</h4>
+	    <ul>
+	      <li>Files are encrypted with $k_{SSK}$</li>
+	      <li>Files are signed with $sk_{SSK}$</li>
+	      <li>Files are retrievable using $pk_{SSK}$ and $string$.</li> 
+	      <li>Only the owner of $sk_{SSK}$ can store files in his space.</li>
+	      <ul>
+		<li>$pk_{SSK}$ defines his subspace.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Content Hash Keys (CHKs)</h4>
+	    <ul>
+	      <li>$keyword_{CHK} \leftarrow SHA1(file)$</li>
+	      <li>$k_{CHK} \leftarrow random$</li>
+	      <li>Files encrypted/decrypted with $k_{CHK}$</li>
+	      <li>Files retrievable using $keyword_{CHK}$</li>
+	    </ul>
+	  </section>  
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <h4>Storage using SSKs and CHKs</h4>
+	    <p><img src="figures/freenet-storing-updatable-files.jpg" width="70%"/></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Uses and applications</h3>
+	    <h4>Good and bad</h4>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Privacy protection and anticensorship</h4>
+	    <ul>
+	      <li>Privacy: protection against traffic monitoring.</li>
+	      <ul>
+		<li>But careful with the data you transmit!
+	      </ul>
+	      <li>Anticenshorship:</li>
+	      <ul>
+		<li>If a country X blocks connections to certain websites.</li>
+		<li>If it also blocks Tor, use bridges.</li>
+	      </ul>
+	      <ul>
+		
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Illegal markets</h4>
+
+	    <p>Silkroad was an illegal market selling drugs, arms, pedophile content.</p>
+	    <ul>
+	      <li>Seized in late 2013.</li>
+	      <li>Used Tor Hidden Services to prevent tracking their servers location.</li>
+	      <li>Also used cryptocurrencies for anonymous payments (well...).</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+
+	    <p><img src="figures/silkroad-successors.png" width="65%"/></p>	    
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Malware</h4>
+	    <ul>
+	      <li>Botnets use Tor to:</li>
+	      <ul>
+		<li>Protect te location of their C&C's.</li>
+		<li>Circumvent traffic blocking ($\sim$ censorship).</li>
+	      </ul>	   
+	      <li>Examples:</li>
+	      <ul>
+		<li><a href="https://blogs.technet.microsoft.com/mmpc/2014/03/05/sefnits-tor-botnet-cc-details/" target="_blank">Sefnit</a></li>
+		<li><a href="https://community.rapid7.com/community/infosec/blog/2012/12/06/skynet-a-tor-powered-botnet-straight-from-reddit" target="_blank">Skynet</a></li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Anoymity and cryptocurrencies</h4>
+
+	    <p>We have already talked about Silk Road et al., but...</p>
+	    <ul>
+	      <li>e-cash (usually) aims at achieving the same properties than physical cash.</li>
+	      <li>This implies untraceability.</li>
+	      <li>Untraceability requires anonymity.</li>
+	      <li>Communications anonymity can only be achieved through systems like Tor.</li>
+	      <ul>
+		<li>Otherwise, attacks like <a href="http://arxiv.org/pdf/1107.4524.pdf" target="_blank">these</a> are possible.</li>
+	      </ul>
+	      <li>Bitcoinj client <a href="http://www.coindesk.com/upcoming-version-bitcoinj-software-will-use-tor-network/" target="_blank">includes support</a> for Tor.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Also, the relationship between anonymizing networks and cryptocurrencies
+	      has been proposed the other way around:</p>
+	    <ul>
+	      <li>Cryptocurrencies can be used to incentivize participation in the network.</li>
+	      <li>In this way, more nodes will exist, implying a higher anonymity degree.</li>
+	      <li>See <a href="http://dedis.cs.yale.edu/dissent/papers/hotpets14-torpath.pdf" target="_blank">Torcoin</a>
+		(<a href="http://www.coindesk.com/bitcoin-technology-anonymous-tor-network-more-powerful/" target="_blank">CoinDesk</a>).</li>
+	    </ul>
+	  </section>
+
+	</section>
+
+	<section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Analysis</h2>
+	    <p>De-anonymizing attacks and issues</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Tor's threat model</h3>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>A <i>threat model</i> defines the assumptions made about the ecosystem.
+	      Mainly, attacker capabilities, behavior of entities in the system and
+	      target properties to ensure.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Tor, and most low-latency anonymity networks, assume that (from 
+	      <i>"<a href="https://svn.torproject.org/svn/projects/design-paper/tor-design.pdf" target="_blank">
+		  Tor: The Second-Generation Onion Router</a>"</i>):</p>
+	    <ul>
+	      <li>The attacker cannot monitor the complete newtork.</li>
+	      <ul>
+		<li>In particular, it can only observe some fraction of the network.</li>
+	      </ul>
+	    </ul>
+	  </section>
+	  
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>The attacker can be passive:</li>
+	      <ul>
+		<li>Observe network edges.</li>
+		<li>Correlate traffic (timing, volume, etc.).</li>
+	      </ul>
+	      <li>Or active:</li>
+	      <ul>
+		<li>Subvert directory state.</li>
+		<li>Attack specific nodes to manipulate the network.</li>
+		<li>Insert malicious traffic patterns.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Common issues</h3>
+	    <ul>
+	      <li><a href="https://www.torproject.org/docs/faq.html.en#WarningsAboutSOCKSandDNSInformationLeaks" target="_blank">DNS leaks</a>:</li>
+	      <ul>
+		<li>External applications making DNS requests.</li>
+		<li>Then routing traffic through Tor.</li>
+		<li>But this may enable traffic correlation analaysis.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li><a href="https://blog.torproject.org/blog/critique-website-traffic-fingerprinting-attacks" target="_blank">Website</a> 
+		<a href="https://securewww.esat.kuleuven.be/cosic/publications/article-2456.pdf" target="_blank">fingerprinting</a>.</li>
+	      <ul>
+		<li>The attacker is located at the user's side.</li>
+		<li>Applies machine learning to traffic pattern (packet sizes, inter-packet timing, etc.).
+	      </ul>
+	      <li>Browser fingerprinting:</li>
+	      <ul>
+		<li>Size of the browser window (don't resize).</li>
+		<li><a href="https://securehomes.esat.kuleuven.be/~gacar/persistent/the_web_never_forgets.pdf" target="_blank">Canvas fingerprinting</a> (HTML5).</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ul>
+	      <li>Software vulnerabilities:</li>
+	      <ul>
+		<li>Malicious JavaScript used to exploit browser 
+		  <a href="http://arstechnica.com/security/2013/08/attackers-wield-firefox-exploit-to-uncloak-anonymous-tor-users/" target="_blank">
+		    vulnerabilities</a>.</li>
+		<li>Tor Browser Bundle is based on Mozilla Firefox.</li>
+	      </ul>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/tbbsettings.png" width="70%"/></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Traffic correlation/confirmation attacks</h3>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Deanonymizing hidden services</h4>
+	    <p>Strategy proposed in <i><a href="http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf" target="_blank">
+		  "Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization"</a></i></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><strong>Key observation</strong>: when establishing connections with a hidden service, 
+	      one end of the circuit created by the hidden service can be under the
+	      control of the attacker: the <strong>rendezvous point</strong>.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>The attacker initiates the protocol to communicate with a hidden service.</p>
+	    <ol>
+	      <li>Gets the HS descriptor from the appropriate HS directory server.</li>
+	      <li>Sends a request through the Introduction Point.</li>
+	      <ul>
+		<li>This request specifies a Rendezvous Point under the control of the attacker.</li>
+	      </ul>
+	      <li>The hidden service sets a circuit to the Rendezvous Point (choosing one of its 
+		Entry Guards.</li>
+	    </ol>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <ol start="4">
+	      <li>The Rendezvous Point sends a predefined traffic pattern down to the Hidden Service.</li>
+	      <ul>
+		<li>If the Entry Guard is controlled by the attacker and detects the pattern,</li>
+		<li>then deduces that the next hop is the hidden service (and has its IP address).</li>
+	      </ul>
+	    </ol>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><img src="figures/hs_attack_en.png" width="90%"/></p>
+	    <p style="font-size:30px">Image source: 
+	      <a href="https://www.incibe.es/blogs/post/Security/SecurityBlog/Article_and_comments/tor_hs_deanonymization" target="_blank">INCIBE</a>.
+	    </p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>The relay early attack</h4>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p><a href="https://blog.torproject.org/blog/did-fbi-pay-university-attack-tor-users" target="_blank">Believed to be</a>
+	      the attack performed by Carnegie Mellon researchers that was going to be presented at the 
+	      <a href="https://web.archive.org/web/20140705114447/http://blackhat.com/us-14/briefings.html#you-dont-have-to-be-the-nsa-to-break-tor-deanonymizing-users-on-a-budget" target="_blank">
+		Black Hat USA</a> conference in 2014.</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Some additional background:</p>
+	    <ul>
+	      <li>Link cells: aimed at next router in the circuit.</li>
+	      <li>Relay cells: aimed at the other end of the circuit.</li>
+	      <li>Relay early cells: special type of relay cell, used to prevent congestion attacks.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>The attack works for deanonymizing users accessing/publishing information
+	      about hidden services. Assumptions:</p>
+	    <ul>
+	      <li>The attacker controls the queried hidden service directory.</li>
+	      <li>The attacker controls the chosen entry guard.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <ol>
+	      <li>The victim establishes a circuit to a malicious hidden service directory.</li>
+	      <ul>
+		<li>The selected entry guard is also controlled by the attacker.</li>
+	      </ul>
+	      <li>The victim queries/write information to hidden service directory.</li>
+	      <li>The hidden service directory sends a specific pattern of relay and relay early cells.</li>
+	      <ul>
+		<li>This pattern encodes the hidden service name.</li>
+	      </ul>
+	      <li>The entry guard detects the pattern.</li>
+	      <ul>
+		<li>Can deanonymize the user (the next hop).</li>
+	      </ul>
+	    </ol>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>But these attacks ultimately depend on the probability of 
+	      using an entry guard controlled by the attacker.</p>
+
+	    <p>Tor developers addressed these (and similar) issue(s) by increasing the frequency of
+	      changing entry guards to <a href="https://www.petsymposium.org/2014/papers/Dingledine.pdf" target="_blank">9 months.</a></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h4>Obtainig statistics about hidden services usage</h4>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Strategy (also) proposed in <i><a href="http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf" target="_blank">
+		  "Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization"</a></i></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Recall that:</p>
+	    <p><i>A router is a v2 hidden service directory if it stores and serves v2 hidden service
+		descriptors, has the Stable and Fast flag, and the authority believes that it's been
+		up for at least 96 hours.</i></p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br />
+	    <p>And recall the structure of the hidden services directory and
+	      how is a HSDir chosen for storing a given descriptor:</p>
+	    <img src="figures/hs_circular_list.png" width="40%" />
+	    <p style="font-size:30px">Source: <i><a href="http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf" target="_blank">"Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization"</a></i></p>	    
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>The authors of the method found that:</p>
+	    <ul>
+	      <li>While only 2 relays are allowed per IP.</li>
+	      <li>Statistics are gathered for the 3+ other nodes.</li>
+	      <li>And it is possible to cheat bandwidth scanners.</li>
+	    </ul>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>So, it is possible to have more than 2 relays per IP, such
+	      that all have good statistics, even though only 2 appear in the
+	      consensus as HSDir (the other are called <i>shadow relays</i>).</p>
+	  </section>
+
+	  <section  data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>The estimated number of IP addresses to own is:</p>
+
+	    <p>$R = \frac{N}{12*2}$</p>
+
+	    <p>Where $N$ is the number of hidden service directories in Tor.</p>
+
+	    <p>Using 50 Amazon EC2 instances and additional optimization techniques,
+	      the authors reduced the costs of the attack to about 57 USD.</p>
+	    
+	  </section>
+	  
+<!--	  <section>
+	    Congestion attacks: http://freehaven.net/anonbib/papers/congestion-longpaths.pdf
+	    Sybil attack.
+	  </section>-->
+
+	</section>
+
+	<section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Hands on</h2>
+	    <p>Stem intro</p>
+	    <p>Circuit picking</p>
+	    <p>Tor network mapping</p>
+	    <p>HSDirs mapping</p>
+	    <p>OR in the middle</p>
+	    <p>Torification</p>	  
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Stem intro</h3>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Stem is:</p>
+	    <ul>
+	      <li>Python library.</li>
+	      <li>Maintained by the Tor project.</li>
+	      <li>Allows to interact with a running Tor relay.</li>
+	    </ul>
+	    <p>Available at <a href="https://stem.torproject.org/" target="_blank">stem.torproject.org</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <p>Stem modules:</p>
+	    <ul>
+	      <li><strong>control</strong>: "Main" module, allows interacting with the Tor network through the OR.</li>
+	      <li><strong>connection</strong>: For setting authenticated connections with the OR.</li>
+	      <li><strong>socket</strong>: For socket communications with the OR.</li>
+	      <li><strong>process</strong>: For launching additional Tor processes.</li>
+	      <li><strong>response</strong>: For parsing message responses from the OR.</li>
+	      <li><strong>exit_policy</strong>: For checking exit policies.</li>
+	      <li><strong>version</strong>: Versioning information.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Circuit picking</h3>
+	    <p><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/stem/circuit_picking.py" target="_blank">circuit_picking.py</a></p>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Tor network mapping</h3>
+	    <p><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/stem/network_mapping.py" target="_blank">network_mapping.py</a></p>	    	    
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>HSDir mapping</h3>
+	    <p><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/stem/hsdirs_mapping.py" target="_blank">hsdirs_mapping.py</a></p>	    
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>OR in the middle</h3>
+	    <ol>
+	      <li><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/stem/get_hs_descriptor.py" target="_blank">Get</a> the descriptor of the HS to "intercept".</li>
+	      <li><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/stem/hsdirs_mapping.py" target="_blank">Get</a> the descriptor of the HSDirs currently serving it.</li>
+	      <li><a href="https://github.com/beeva-jesusdiaz/tor-utils/blob/master/misc/genkey.c" target="_blank">Calculate</a> a "key" in the middle.</li>
+	      <li>Launch the node (and wait to become a HSDir...).</li>
+	    </ol>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h3>Torification</h3>
+	    <p>Options:</p>
+	    <ul>
+	      <li>Have the devs adapt the application to Tor.</li>
+	      <li>Configure the application to use a (Tor) proxy.</li>
+	      <li>Torsocks.</li>
+	      <li>Transparent proxies.</li>
+	      <li>Isolating proxies.</li>
+	    </ul>
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p>Torsocks:</p>
+	    <img src="figures/torsocks.jpg" width="60%" />
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p>Transparent proxy:</p>
+	    <a href="https://blog.jessfraz.com/post/routing-traffic-through-tor-docker-container/" target="_blank">Routing traffic through a Tor Docker container</a>.
+	  </section>
+
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <br/>
+	    <p>Isolation proxy:</p>
+	    <img src="figures/Whonix.jpg" width="80%" />
+	    <p style="font-size:30px">Source: <i><a href="https://trac.torproject.org/projects/tor/wiki/doc/TorifyHOWTO/IsolatingProxy" target="_blank">trac.torproject.org</a></i></p>
+	  </section>	  
+
+	</section>
+	
+	<section>
+	  
+	  <section data-background-image="figures/beeva-middle.png" data-background-size="70%">
+	    <h2>Questions?</h2>
+	    <p>e-mail: <a href="mailto:jesus.diaz@beeva.com">jesus.diaz@beeva.com</a></p>
+	  </section>
+
+	</section>
+	
+	<section data-background-image="figures/beeva-back.png" data-background-size="60%"></section>
+      </div>
+    </div>
+
+    <script src="revealjs/lib/js/head.min.js"></script>
+    <script src="revealjs/js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      history: true,
+      math: {
+      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+      },
+
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+      { src: 'revealjs/plugin/markdown/marked.js' },
+      { src: 'revealjs/plugin/markdown/markdown.js' },
+      { src: 'revealjs/plugin/notes/notes.js', async: true },
+      { src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'revealjs/plugin/math/math.js', async: true }
+      ]
+      });
+    </script>
+
+    <script src="jquery/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+      var header = $('#header').html();
+      if ( window.location.search.match( /print-pdf/gi ) ) {
+      $('.slides > section').prepend(header);
+      }
+      else {
+      $('.slides').prepend(header);
+      }
+    </script>
+  </body>
+</html>
